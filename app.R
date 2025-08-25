@@ -4,6 +4,8 @@ library(shinydashboard)
 library(DT)
 library(reticulate)
 
+use_virtualenv("r-shiny-env", required = TRUE)
+
 # Configure Python environment (you may need to adjust the path)
 # use_python("/usr/bin/python3")  # Uncomment and adjust path as needed
 
