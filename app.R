@@ -4,7 +4,7 @@ library(shinydashboard)
 library(DT)
 library(reticulate)
 
-#use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
+use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
 
 # Configure Python environment (you may need to adjust the path)
 # use_python("/usr/bin/python3")  # Uncomment and adjust path as needed
@@ -267,9 +267,18 @@ def get_sessions_data(fw_client, project_id):
     
     DT::datatable(
       values$sessions_data,
+      extensions = 'Buttons',
       options = list(
         pageLength = 25,
-        scrollX = TRUE
+        scrollX = TRUE,
+        dom = 'Bfrtip',
+        buttons = list(
+          list(
+            extend = 'excel',
+            text = 'Download Excel',
+            filename = 'sessions_data'
+          )
+        )
       )
     )
   })
