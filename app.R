@@ -4,7 +4,7 @@ library(shinydashboard)
 library(DT)
 library(reticulate)
 
-use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
+#use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
 
 # Configure Python environment (you may need to adjust the path)
 # use_python("/usr/bin/python3")  # Uncomment and adjust path as needed
