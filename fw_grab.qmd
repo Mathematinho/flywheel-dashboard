@@ -11,13 +11,13 @@ execute:
 
 Date: `r Sys.Date()`
 
-```{r}
+```{r setup_reticulate}
 library(reticulate)
 use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
 ```
 
 
-```{python}
+```{python grabbing}
 import flywheel
 import os
 import pandas as pd
@@ -129,7 +129,7 @@ files_df = get_project_files_dataframe(project_id)
 
 
 
-```{r}
+```{r spitting}
 library(tidyverse)
 library(here)
 library(jsonlite)
