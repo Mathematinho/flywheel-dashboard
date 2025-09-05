@@ -1,0 +1,139 @@
+---
+title: "FW Meta-data Daliy Grab Log"
+  html:
+    self-contained: true
+execute:
+  echo: false
+  warning: false
+  
+---
+
+Date: `r Sys.Date()`
+
+```{python}
+import flywheel
+import os
+import pandas as pd
+import numpy as np
+import shutil
+import json
+# Connect to Flywheel
+
+api_key = 'flywheel.biohpc.swmed.edu:djEaleoqzU2mVotVJ9IjtGpN2AcxaTKAh24PzV7hEogAXQObNezez1-sA'
+fw = flywheel.Client(api_key)
+
+# projects = fw.projects()
+# project_list = []
+# for project in projects:
+#     project_list.append({'id': project.id, 'label': project.label})
+# 
+# pd.DataFrame(project_list)
+
+
+def get_project_files_dataframe(project_id):
+    """
+    Create a DataFrame with all files under a Flywheel project
+    
+    Args:
+        project_id (str): The Flywheel project ID
+        
+    Returns:
+        pd.DataFrame: DataFrame with file information
+    """
+    
+    # Initialize Flywheel client
+    # fw = fw.Client()  # Uncomment if not already initialized
+    
+    # Get the project
+    project = fw.get_project(project_id)
+    
+    # List to store file information
+    files_data = []
+    
+    print(f"Processing project: {project.label}")
+    
+    # Get all subjects in the project
+    subjects = project.subjects()
+    
+    for subject in subjects:
+        print(f"  Processing subject: {subject.label}")
+        
+        # Get all sessions for this subject
+        sessions = subject.sessions()
+        
+        for session in sessions:
+            print(f"    Processing session: {session.label}")
+            
+            # Get all acquisitions for this session
+            acquisitions = session.acquisitions()
+            
+            for acquisition in acquisitions:
+                print(f"      Processing acquisition: {acquisition.label}")
+                
+                # Get all files for this acquisition
+                files = acquisition.files
+                
+                for file in files:
+                    file = file.reload()
+                    file_info = {
+                        'project_label': project.label,
+                        'subject_label': subject.label,
+                        'session_label': session.label,
+                        'acquisition_label': acquisition.label,
+                        'file_info': file.to_dict()
+                      
+                        # 'group_name': project.group,
+                        # 'project_id': project.id,
+                        # 'project_label': project.label,
+                        # 'subject_id': subject.id,
+                        # 'subject_label': subject.label,
+                        # 'session_id': session.id,
+                        # 'session_label': session.label,
+                        # 'acquisition_id': acquisition.id,
+                        # 'acquisition_label': acquisition.label,
+                        # 'file_name': file.name,
+                        # 'file_modality': file.modality,
+                        # 'file_type': file.type,
+                        # 'file_size': file.size,
+                        # 'file_classification': file.classification
+                    }
+                    files_data.append(file_info)
+
+    # Create DataFrame
+    df = pd.DataFrame(files_data)
+    
+    print(f"\nTotal files found: {len(df)}")
+    return df
+      
+# Usage example:
+
+project_id = '68adf631eca70d0b1f705fda'  # AI_time_analysis
+
+
+files_df = get_project_files_dataframe(project_id)
+
+
+# #download all files in this project.
+# project = fw.get_project(project_id)
+# 
+# fw.download_tar(project,'test.tar')
+
+```
+
+
+
+
+```{r}
+library(tidyverse)
+library(here)
+library(jsonlite)
+
+df_files <- reticulate::py$files_df %>%
+  unnest_wider(where(is.list)) 
+
+df_files %>% saveRDS("fw meta data/fw_project_Prospective cHTN MRI RTR3T.rds")
+
+```
+
+
+
