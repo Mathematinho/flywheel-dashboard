@@ -1,5 +1,6 @@
 ---
-title: "FW Meta-data Daliy Grab Log"
+title: "FW Meta-data Daily Grab Log"
+format:
   html:
     self-contained: true
 execute:
