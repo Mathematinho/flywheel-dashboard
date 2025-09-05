@@ -12,7 +12,7 @@ Date: `r Sys.Date()`
 
 ```{r}
 library(reticulate)
-use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
+#use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
 ```
 
 
@@ -28,12 +28,12 @@ import json
 api_key = 'flywheel.biohpc.swmed.edu:djEaleoqzU2mVotVJ9IjtGpN2AcxaTKAh24PzV7hEogAXQObNezez1-sA'
 fw = flywheel.Client(api_key)
 
-# projects = fw.projects()
-# project_list = []
-# for project in projects:
-#     project_list.append({'id': project.id, 'label': project.label})
-# 
-# pd.DataFrame(project_list)
+projects = fw.projects()
+project_list = []
+for project in projects:
+    project_list.append({'id': project.id, 'label': project.label})
+
+pd.DataFrame(project_list)
 
 
 def get_project_files_dataframe(project_id):
@@ -134,7 +134,11 @@ library(here)
 library(jsonlite)
 
 df_files <- reticulate::py$files_df %>%
-  unnest_wider(where(is.list)) 
+  unnest_wider(where(is.list)) %>%
+  mutate(time1 = session_label,
+         time2 = info[[1]]$InstanceCreationTime,
+         time3 = created,
+         .after = acquisition_label)
 
 df_files %>% saveRDS("grabbed.rds")
 
