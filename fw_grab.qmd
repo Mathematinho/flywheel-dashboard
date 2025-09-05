@@ -13,7 +13,7 @@ Date: `r Sys.Date()`
 
 ```{r}
 library(reticulate)
-#use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
+use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
 ```
 
 
