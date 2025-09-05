@@ -10,6 +10,12 @@ execute:
 
 Date: `r Sys.Date()`
 
+```{r}
+library(reticulate)
+use_python("/opt/venvs/r-shiny-env/bin/python", required = TRUE)
+```
+
+
 ```{python}
 import flywheel
 import os
@@ -122,7 +128,6 @@ files_df = get_project_files_dataframe(project_id)
 
 
 
-
 ```{r}
 library(tidyverse)
 library(here)
@@ -135,5 +140,8 @@ df_files %>% saveRDS("fw meta data/fw_project_Prospective cHTN MRI RTR3T.rds")
 
 ```
 
-
+unique subjects: `r df_files %>% distinct(subject_label) %>% nrow()`
+unique sessions: `r df_files %>% distinct(session_label) %>% nrow()`
+unique acquisitions: `r df_files %>% distinct(acquisition_label) %>% nrow()`
+total files: `r nrow(df_files)`
 
